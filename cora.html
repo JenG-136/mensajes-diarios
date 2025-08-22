@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensajes para ti💗</title>
+   <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #ff9a9e, #fad0c4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+    .container {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        width: 90%;
+        max-width: 400px;
+        z-index: 2;
+    }
+    h1 {
+        color: #ff4b5c;
+        font-size: 2em;
+    }
+    p {
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+    .message {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+    }
+    .message.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    /* Sidebar */
+    .sidebar {
+        position: fixed;
+        right: -300px;
+        top: 0;
+        width: 300px;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        transition: right 0.5s ease;
+        overflow-y: auto;
+        padding: 20px;
+        z-index: 1;
+    }
+    .sidebar.show {
+        right: 0;
+    }
+    .toggle-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: #ff4b5c;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        z-index: 3;
+    }
+    .note {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 10px;
+        background: #ffe4e9;
+        position: relative;
+        text-align: center;
+    }
+    .note.locked {
+        filter: blur(5px);
+        pointer-events: none;
+    }
+    .note .lock-icon {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 1.2em;
+        color: #ff4b5c;
+    }
+    .date {
+        font-size: 0.8em;
+        margin-top: 5px;
+        color: #777;
+    }
+
+    @media (max-width: 600px) {
+        body {
+            flex-direction: column;
+            height: auto;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        h1 {
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1em;
+        }
+        .sidebar {
+            width: 80%;
+            right: -80%;
+        }
+        .sidebar.show {
+            right: 0;
+        }
+        .toggle-btn {
+            top: 5px;
+            right: 5px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">Notas</button>
+
+    <div class="container">
+        <h1>Hola Corazón 🥺❤️</h1>
+        <p class="message" id="dailyMessage">Cargando tu mensaje...</p>
+
+    </div>
+
+    <div class="sidebar" id="sidebar"></div>
+
+    <Script>
+        const messages = [
+"Desde hoy, cada palabra que te escriba lleva un pedacito de mi corazón. Este es solo el comienzo. Abre cada mensaje que te enviaré cada día… porque cada uno guarda un pedacito de lo que siento por ti.",
+"No sé cómo lo haces, pero cada cosa en ti me parece especial. Tu forma de hablar, de mirar, de existir… me deja sin palabras.",
+"A veces me basta con imaginar tu abrazo para que todo mi mundo se acomode. Y sí… lo deseo más de lo que admito.",
+"Si fueras un verso, serías el que da sentido a todo mi poema. Y si fueras una estrella… ya sabes, serías la que más brilla.",
+"Eres como ese rayito de sol que se cuela por la ventana y te acaricia sin pedir permiso. Así llegaste tú… sin aviso, pero justo a tiempo.",
+"Te extraño más de lo que puedo expresar.",
+"Este es el séptimo mensaje, pero mi cariño por ti ya va por mil. Y si esto es solo el inicio… no quiero que tenga final.",
+"Hoy empieza algo especial… Cada día te enviaré un pedacito de lo que siento. Y aunque sean solo palabras, llevan mi corazón escondido entre letras.",
+"No sé si lo imaginas, pero cada vez que pienso en ti… mi cuerpo responde como si estuvieras cerca. Y sí, te deseo más de lo que admito.",
+"Eres como esa canción que no se olvida, como el aroma que se queda en la piel, como el verso que da sentido a todo mi poema.",
+"Tu forma de ser me desarma. No es solo tu sonrisa, ni tu mirada… es esa energía tuya que me hace querer estar cerca, siempre.",
+"No sé qué vendrá mañana, pero si tú estás ahí, yo también quiero estar. Prometo seguir enviándote amor, día tras día.",
+"Si fueras chocolate, ya te habría mordido. Y si fueras café… te tomaría lento, saboreando cada parte de ti ☕😉",
+"A veces me pregunto cómo sería mi mundo sin ti… y no me gusta la idea. Porque desde que llegaste, todo tiene más color.",
+"Hoy no tengo grandes palabras… solo una certeza: me haces bien. Y eso, para mí, ya es muchísimo.",
+"No sé si lo notas, pero cada vez que te pienso, mi piel se estremece como si tus manos la recorrieran. Y sí… te pienso más de lo que debería.",
+"Eres como el amanecer: llegas suave, pero cambiaslo todo. Y desde que apareciste, mi cielo tiene más colores.",
+"Tu inteligencia me fascina. Tu forma de ver el mundo, de hablar, de sentir… es como un universo que quiero explorar sin mapa.",
+"Cada día que pasa, me convenzo más: quiero que estés en mi historia. No como capítulo… sino como protagonista.",
+"Si fueras emoji, serías ese que me hace sonreír sin razón 😏 Y si fueras app… ya te tendría abierta todo el día.",
+"A veces me da miedo sentir tanto, pero luego recuerdo que eres tú… y todo miedo se convierte en deseo de seguir.",
+"Hoy quiero recordarte lo orgullosa que estoy de ti ❤️",
+"Eres mi razón de sonreír, aunque estemos lejos 💕",
+"Cada día te amo un poquito más 😘",
+"Gracias por ser tan increíble, me inspiras siempre 🌟",
+"Aunque la distancia nos separe, te siento cerca 💌",
+"Tú haces que mi mundo sea más bonito 🌸",
+"Espero que tengas un día tan hermoso como tú 😍",
+"Hoy quiero que sepas que pienso en ti incluso en los momentos más tontos, como cuando como chocolate 🍫",
+"Me encanta imaginar cómo te ves ahora mismo, y me muero de ganas de abrazarte 💖",
+"Si pudieras escuchar mi corazón, sabrías que late solo por ti ❤️",
+"Quisiera enviarte un pedacito de cielo cada vez que sonríes ☁️💫",
+"A veces me pregunto si sabes lo mucho que me haces reír 😂 y suspirar 😘",
+"Tu voz es la melodía que hace que mi día sea perfecto 🎶",
+"Si fueras café, ya te habría tomado todo el día ☕😉",
+"No puedo evitar sonreír cuando pienso en ti, incluso en público 😏",
+"Quisiera enviarte todos mis abrazos a la distancia 🤗",
+"Si fueras un sueño, no querría despertar jamás 🌙",
+"Eres como un imán que atrae mi felicidad 💕",
+"A veces pienso que debería inventar palabras nuevas solo para describirte 🥰",
+"Si pudiera elegir un lugar ahora, sería a tu lado, sin pensarlo 💖",
+"Cada mensaje que te envío lleva un pedacito de mi locura por ti 😜",
+"No hay nada que me haga más feliz que imaginar tu sonrisa 😍",
+"Si fueras una app, ya te tendría abierta todo el día 📱💌",
+"Tu risa es mi sonido favorito 🎵",
+"Si fueras chocolate, ¡ya te habría devorado! 🍫😉",
+"Cada día contigo, aunque sea en pensamiento, es un regalo 🎁",
+"No sé cómo explicarlo, pero contigo todo se siente más bonito 🌸",
+"Si pudiera enviarte un abrazo por mensaje, ya estarías abrazada 💌",
+"Me pregunto si sabes que cada vez que pienso en ti, sonrío como tonta 😏",
+"Si fueras Wi-Fi, ya me habría conectado contigo sin contraseña 📶❤️",
+"Cada palabra que escribo te lleva un poquito más cerca de mí 💖",
+"Si el amor tuviera olor, sería exactamente como tú 🌹",
+"Contigo, hasta los días grises tienen colores 🌈",
+"Si fueras pizza, ya te habría pedido completa 🍕😜",
+"Cada mensaje es como un pedacito de mi corazón escondido para ti 💌",
+"Si pudiera atraparte en una canción, te escucharía mil veces 🎵",
+"Me encantaría ser tu manta en los días fríos, abrazándote siempre 🥰",
+"Cada vez que pienso en ti, mi sonrisa se escapa sola 😍",
+"Si fueras un regalo, ya te habría abierto mil veces 🎁",
+"Tu mirada tiene el poder de cambiar mis pensamientos más oscuros 💖",
+"Si fueras sol, ya me habría calentado todo el día ☀️",
+"No sé cómo lo haces, pero hasta el silencio contigo tiene sentido 🫂",
+"Si el amor fuera un viaje, viajaría contigo sin mapa ni destino ✈️❤️",
+"Me haces querer escribir poemas tontos y sonreír mientras lo hago 😘",
+"Si fueras agua, bebería de ti cada segundo 💧😉",
+"Cada día me sorprendo más de lo mucho que significas para mí 💕",
+"Si pudiera poner tus abrazos en una botella, los guardaría todos 💌",
+"Me encantaría robarte una sonrisa y quedarme con ella todo el día 😏",
+"Si fueras un aroma, sería el que me hace pensar en ti siempre 🌸",
+"Contigo, hasta las cosas más simples se sienten especiales ✨",
+"Si pudieras leer mis pensamientos, sabrías que solo habitan en ti 💖",
+"Me haces sentir que todo es posible, incluso a distancia 🌈",
+"Si fueras un chocolate caliente, ya me habría tomado todos ☕❤️",
+"Cada mensaje es un recordatorio de que te extraño y te adoro 😘",
+"Si pudiera, te enviaría un abrazo que dure toda la vida 🤗",
+"No hay nada que me haga más feliz que pensar en ti antes de dormir 🌙",
+"Si fueras canción, la escucharía una y otra vez sin cansarme 🎶",
+"Contigo, hasta los lunes se sienten como viernes 💕",
+"Si pudiera, te pondría en mi bolsillo y te llevaría a todos lados 😏",
+"Cada pensamiento que tengo de ti me hace sonreír como tonta 😍",
+"Si fueras helado, te comería lento, saboreando cada parte 🍦😉",
+"Me encantaría que supieras que cada día te pienso más 💖",
+"Si fueras un arcoíris, ya habría corrido para encontrarte 🌈",
+"Cada mensaje que te envío lleva un pedacito de mi corazón escondido 💌",
+"Si fueras película, ya la habría visto mil veces 🎬💖",
+"Contigo, hasta los silencios tienen música 🎵",
+"Si pudiera, te enviaría mil mariposas para que te hagan sonreír 🦋",
+"Cada vez que pienso en ti, mi corazón late más rápido 😘",
+"Si fueras luna, ya te habría mirado toda la noche 🌙",
+"Me encantaría que supieras que cada día me haces más feliz 💕",
+"Si fueras un café, ya te habría tomado despacito ☕😉",
+"Cada pensamiento de ti es un regalo que me hace sonreír 😍",
+"Si fueras un abrazo, no te soltaría nunca 🤗",
+"Contigo, incluso la distancia se siente cercana 💖",
+"Si pudiera, te llenaría de mensajes solo para que sonrías 📩",
+"Cada día contigo, aunque sea en la imaginación, vale oro ✨",
+"Si fueras estrella, ya te habría pedido un deseo 🌟",
+"Me haces sentir que todo es posible solo por pensar en ti 💕",
+"Si fueras pastel, te habría probado ya todo el día 🎂😉",
+"Cada palabra que te escribo está llena de cariño y travesura 😏",
+"Si pudiera, te enviaría un millón de besos a la distancia 😘",
+"Contigo, todo tiene un sabor más dulce 🌸",
+"Si fueras perfume, ya estaría oliéndote todo el día 🌹",
+"Cada mensaje es una prueba de lo mucho que pienso en ti 💖",
+"Si pudieras ver mi sonrisa ahora mismo, sabrías que es por ti 😍",
+"Si fueras abrazo, ya estaría envuelta en ti todo el día 🤗",
+"Cada día me convenzo más que eres increíble y especial 💕",
+"Si fueras canción, ya estaría tarareándote sin parar 🎵",
+"Si pudiera, te enviaría rayos de sol para iluminar tu día ☀️",
+"Contigo, todo se siente más ligero y bonito 💖",
+"Si fueras chocolate, ya estaría saboreándote lentamente 🍫😉",
+"Cada vez que pienso en ti, me sale una sonrisa automática 😏",
+"Si fueras dibujo, ya te habría pintado mil veces 🎨",
+"Cada mensaje que te envío es un abrazo virtual lleno de amor 💌",
+"Si fueras estrella fugaz, pediría mil deseos solo por ti 🌠",
+"Contigo, incluso los días difíciles tienen luz 💖",
+"Si pudiera, te llenaría de cosquillas a distancia 😜",
+"Cada palabra que escribo es solo para que sonrías 😘",
+"Si fueras nube, me recostaría en ti todo el día ☁️",
+"Contigo, todo se siente más dulce y divertido 💕",
+"Si fueras risa, me reiría contigo todo el tiempo 😂",
+"Cada mensaje es una excusa para decirte lo mucho que me importas 💖",
+"Si fueras abrazo, te abrazaría hasta que el mundo desaparezca 🤗",
+"Si pudiera, te enviaría todo mi cariño envuelto en palabras 💌",
+"Contigo, todo se siente ligero y lleno de amor 💕",
+"Si fueras canción, ya estaría cantándote sin parar 🎵",
+"Si pudiera, te enviaría un millón de mariposas que te hagan sonreír 🦋",
+"Contigo, incluso el silencio se siente lleno de ternura 💖",
+"Si fueras luna, ya te miraría todas las noches 🌙",
+"Cada mensaje que te envío es un pedacito de mi corazón escondido 💌",
+"Si pudieras ver mi sonrisa ahora mismo, sabrías que es por ti 😍",
+"Si fueras pastel, ya te habría probado con gusto todo el día 🎂😉",
+"Cada día pienso más en ti y en lo afortunada que soy 💕",
+"Si fueras abrazo, no te soltaría nunca 🤗",
+"Contigo, todo tiene más color y más magia 💖",
+"Si pudiera, te llenaría de besos a distancia 😘",
+"Cada palabra que escribo está llena de cariño y travesura 😏",
+"Si fueras estrella, pediría un deseo solo por ti 🌟",
+"Contigo, todo se siente más bonito y divertido 💕",
+"Si fueras perfume, ya estaría oliéndote todo el día 🌹",
+"Cada mensaje que te envío es un abrazo virtual lleno de amor 💌",
+"Si pudieras escuchar mi corazón, sabrías que late solo por ti ❤️",
+"Contigo, incluso los días grises tienen colores 🌈  ....TE AMO...."
+];
+
+
+       const startDate = new Date("2025-08-22"); // Día 1
+const today = new Date();
+const diffTime = today - startDate; // diferencia en ms
+const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // convertir a días
+
+// Limitar al rango de mensajes disponibles
+const dayIndex = Math.min(diffDays, messages.length - 1);
+
+const dailyMessage = document.getElementById('dailyMessage');
+dailyMessage.textContent = messages[dayIndex];
+setTimeout(() => dailyMessage.classList.add('show'), 200);
+
+// Generar la lista lateral con candado
+const sidebar = document.getElementById('sidebar');
+messages.forEach((msg, index) =>{
+    const note = document.createElement('div');
+    note.classList.add('note');
+    if(index > dayIndex) note.classList.add('locked');
+
+    note.innerHTML = `
+        <span class="lock-icon">${index > dayIndex ? "🔒" : "🔓"}</span>
+        <div>${msg}</div>
+        <div class="date">Día ${index + 1}</div>
+    `;
+    sidebar.appendChild(note);
+});
+
+       
+    
+        function toggleSidebar(){
+            sidebar.classList.toggle('show');
+        }
+    </Script>
+
+</body>
+
+</html>
