@@ -59,18 +59,19 @@
     }
     .sidebar.show {
         right: 0;
+        z-index: 3;
     }
     .toggle-btn {
         position: absolute;
-        right: 10px;
-        top: 10px;
+        right: 15px;
+        top: 15px;
         background: #ff4b5c;
         color: white;
         border: none;
-        padding: 10px 15px;
-        border-radius: 10px;
+        padding: 15px 20px;
+        border-radius: 15px;
         cursor: pointer;
-        z-index: 3;
+        z-index: 4;
     }
     .note {
         margin-bottom: 15px;
@@ -129,11 +130,61 @@
             font-size: 0.9em;
         }
     }
+    /* Modal flotante */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: rgb(247, 197, 224);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 90%;
+            text-align: center;
+            font-size: 1.5em;
+            animation: fadeIn 0.3s ease;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0; transform: scale(0.8);}
+            to {opacity: 1; transform: scale(1);}
+        }
+
+        contenedor-principal {
+  display: flex;
+  flex-direction: column; /* Organiza verticalmente */
+  align-items: center;    /* Centra horizontalmente */
+}
+
+.imagen-decorativa img {
+  width: 200px; /* Ajusta tamaño */
+  margin-top: 20px; /* Espacio entre notas e imagen */
+  opacity: 0.8; /* Opcional: un poco transparente */
+}
+
+
+
 </style>
 
 </head>
 
 <body>
+    
     <button class="toggle-btn" onclick="toggleSidebar()">Notas</button>
 
     <div class="container">
@@ -143,15 +194,29 @@
     </div>
 
     <div class="sidebar" id="sidebar"></div>
+    <!-- Modal para ver en grande -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <!-- Imagen decorativa abajo -->
+  <div class="imagen-decorativa">
+    <img src="ruta/imagen.png" alt="Decoración">
+  </div>
+
+  
 
     <script>
         const messages = [
-"Desde hoy, cada palabra que te escriba lleva un pedacito de mi corazón. Este es solo el comienzo. Abre cada mensaje que te enviaré cada día… porque cada uno guarda un pedacito de lo que siento por ti.",
-"No sé cómo lo haces, pero cada cosa en ti me parece especial. Tu forma de hablar, de mirar, de existir… me deja sin palabras.",
+"Desde hoy, cada palabra que te escriba llevará un pedacito de mi corazón. Este es solo el comienzo. Abre cada mensaje cada día, espera a que se desbloquee… porque en cada uno se esconde un fragmento de lo que siento por ti. Y empiezo con esto: Te extraño más de lo que las palabras pueden decir. 🥺",
 "A veces me basta con imaginar tu abrazo para que todo mi mundo se acomode. Y sí… lo deseo más de lo que admito.",
 "Si fueras un verso, serías el que da sentido a todo mi poema. Y si fueras una estrella… ya sabes, serías la que más brilla.",
 "Eres como ese rayito de sol que se cuela por la ventana y te acaricia sin pedir permiso. Así llegaste tú… sin aviso, pero justo a tiempo.",
-"Te extraño más de lo que puedo expresar.",
+"No sé cómo lo haces, pero cada cosa en ti me parece especial. Tu forma de hablar, de mirar, de existir… me deja sin palabras.",
+"Espero que tengas un día tan hermoso como tú 😍",
 "Este es el séptimo mensaje, pero mi cariño por ti ya va por mil. Y si esto es solo el inicio… no quiero que tenga final.",
 "Hoy empieza algo especial… Cada día te enviaré un pedacito de lo que siento. Y aunque sean solo palabras, llevan mi corazón escondido entre letras.",
 "No sé si lo imaginas, pero cada vez que pienso en ti… mi cuerpo responde como si estuvieras cerca. Y sí, te deseo más de lo que admito.",
@@ -164,16 +229,15 @@
 "No sé si lo notas, pero cada vez que te pienso, mi piel se estremece como si tus manos la recorrieran. Y sí… te pienso más de lo que debería.",
 "Eres como el amanecer: llegas suave, pero cambiaslo todo. Y desde que apareciste, mi cielo tiene más colores.",
 "Tu inteligencia me fascina. Tu forma de ver el mundo, de hablar, de sentir… es como un universo que quiero explorar sin mapa.",
-"Cada día que pasa, me convenzo más: quiero que estés en mi historia. No como capítulo… sino como protagonista.",
+"Cada día que pasa, me convenzo más: quiero que estés en mi historia. No como capítulo… sino como protagonista.💕",
 "Si fueras emoji, serías ese que me hace sonreír sin razón 😏 Y si fueras app… ya te tendría abierta todo el día.",
 "A veces me da miedo sentir tanto, pero luego recuerdo que eres tú… y todo miedo se convierte en deseo de seguir.",
 "Hoy quiero recordarte lo orgullosa que estoy de ti ❤️",
 "Eres mi razón de sonreír, aunque estemos lejos 💕",
-"Cada día te amo un poquito más 😘",
+"Cada día te quiero un poquito más 😘",
 "Gracias por ser tan increíble, me inspiras siempre 🌟",
 "Aunque la distancia nos separe, te siento cerca 💌",
 "Tú haces que mi mundo sea más bonito 🌸",
-"Espero que tengas un día tan hermoso como tú 😍",
 "Hoy quiero que sepas que pienso en ti incluso en los momentos más tontos, como cuando como chocolate 🍫",
 "Me encanta imaginar cómo te ves ahora mismo, y me muero de ganas de abrazarte 💖",
 "Si pudieras escuchar mi corazón, sabrías que late solo por ti ❤️",
@@ -293,38 +357,58 @@
 ];
 
 
-       const startDate = new Date("2025-08-22"); // Día 1
-const today = new Date();
-const diffTime = today - startDate; // diferencia en ms
-const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // convertir a días
+// --- Cálculo de días basado en medianoche local ---
+        const startDate = new Date(2025, 7, 23); // meses empiezan en 0 (7 = agosto)
+        startDate.setHours(0,0,0,0);
 
-// Limitar al rango de mensajes disponibles
-const dayIndex = Math.min(diffDays, messages.length - 1);
+        const today = new Date();
+        today.setHours(0,0,0,0);
 
-const dailyMessage = document.getElementById('dailyMessage');
-dailyMessage.textContent = messages[dayIndex];
-setTimeout(() => dailyMessage.classList.add('show'), 200);
+        const diffTime = today - startDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-// Generar la lista lateral con candado
-const sidebar = document.getElementById('sidebar');
-messages.forEach((msg, index) =>{
-    const note = document.createElement('div');
-    note.classList.add('note');
-    if(index > dayIndex) note.classList.add('locked');
+        const dayIndex = Math.min(diffDays, messages.length - 1);
 
-    note.innerHTML = `
-        <span class="lock-icon">${index > dayIndex ? "🔒" : "🔓"}</span>
-        <div>${msg}</div>
-        <div class="date">Día ${index + 1}</div>
-    `;
-    sidebar.appendChild(note);
-});
+        const dailyMessage = document.getElementById('dailyMessage');
+        dailyMessage.textContent = messages[dayIndex];
+        setTimeout(() => dailyMessage.classList.add('show'), 200);
 
-       
-    
-        function toggleSidebar(){
+        // --- Sidebar con candados y clic en mensajes desbloqueados ---
+        const sidebar = document.getElementById('sidebar');
+        messages.forEach((msg, index) => {
+            const note = document.createElement('div');
+            note.classList.add('note');
+            if(index > dayIndex) note.classList.add('locked');
+
+            note.innerHTML = `
+                <span class="lock-icon">${index > dayIndex ? "🔒" : "🔓"}</span>
+                <div>${msg}</div>
+                <div class="date">Día ${index + 1}</div>
+            `;
+            sidebar.appendChild(note);
+
+            // Mostrar modal en mensajes desbloqueados
+            note.addEventListener('click', () => {
+                if (!note.classList.contains('locked')) {
+                    document.getElementById('modalText').textContent = msg;
+                    document.getElementById('modal').style.display = 'flex';
+                }
+            });
+        });
+
+        function toggleSidebar() {
             sidebar.classList.toggle('show');
         }
+
+        // --- Cerrar modal ---
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').style.display = 'none';
+            }
+        });
     </script>
 
 </body>
